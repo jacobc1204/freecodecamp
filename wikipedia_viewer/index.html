@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wikipedia Viewer</title>
+</head>
+<body>
+  <div class="container">
+    <div>
+      <h1>Wikipedia Search Engine</h1>
+      <input type="text"><br>
+      <a href="https://en.wikipedia.org/wiki/Special:Random" target="_blank"><button>Gimme Something <em>Fresh</em></button></a>
+      <div id="results"></div>
+    </div>
+  </div>
+</body>
+
+<style>
+
+  body {
+    color: black;
+    background: linear-gradient(to bottom right, purple, pink);
+    background-attachment: fixed;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  input {
+    border: none;
+    border-radius: 50px;
+    height: 60px;
+    font-size: 50px;
+    text-align: center;
+    font-family: "Montserrat", sans-serif;
+  }
+
+  button {
+    padding: 10px;
+  }
+
+  .container {
+    height: 100%;
+    padding: 10px;
+  }
+
+  #results {
+    display: grid;
+    grid-auto-flow: row;
+    width: 55%;
+    margin: 0 auto;
+    padding: 5px;
+    grid-gap: 2px;
+  }
+
+  .result {
+    display: grid;
+    grid-template-rows: repeat(2, 1fr);
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    border: 3px solid #ffc600;
+    background: rgba(255, 255, 255, 0.4);
+    color: black;
+    padding: 20px;
+    border-radius: 20px;
+  }
+
+  @keyframes shake {
+    50% {
+      transform: translateX(100px);
+    }
+  }
+
+  .result:hover {
+    animation-name: shake;
+    animation-duration: .3s;
+  }
+
+  .result img {
+    grid-row: span 2;
+    grid-column: 1;
+  }
+
+  a {
+    text-decoration: none;
+  }
+
+</style>
+
+<script>
+
+  const input = document.querySelector("input");
+  window.onload = input.focus();
+  const url = "http://en.wikipedia.org/w/api.php?action=query&formatversion=2&generator=prefixsearch&"
+  const displayResults = document.querySelector("#results");
+
+  input.addEventListener('keyup', function() {
+    if (!input.value) {
+      displayResults.innerHTML = '';
+      return console.log('no input');
+    }
+    fetch(url + `gpssearch=${input.value}&gpslimit=10&prop=pageimages|pageterms|info&inprop=url&piprop=thumbnail&pithumbsize=100&pilimit=10&redirects=&wbptterms=description&utf8=&format=json&origin=*`)
+      .then(resp => resp.json())
+      .then(data => {
+        const content = data.query.pages;
+        let results = [];
+        content.forEach(page => {
+          let title = page.title;
+          let description = page.terms.description[0];
+          let thumbnail = page.thumbnail.source;
+          let link = page.fullurl;
+          results.push(`
+                <a href='${link}' target="_blank"><div class="result"><img src=${thumbnail}></img><h1>${title}</h1><p>${description}</p></div></a>
+          `);
+          displayResults.innerHTML = results.join('<br>');
+        });
+      });
+    }
+  );
+
+</script>
+
+</html>

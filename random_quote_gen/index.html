@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+  <script defer src="https://use.fontawesome.com/releases/v5.0.6/js/all.js"></script>
+  <script>window.twttr = (function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0],
+    t = window.twttr || {};
+    if (d.getElementById(id)) return t;
+    js = d.createElement(s);
+    js.id = id;
+    js.src = "https://platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js, fjs);
+  
+    t._e = [];
+    t.ready = function(f) {
+      t._e.push(f);
+    };
+  
+    return t;
+  }(document, "script", "twitter-wjs"));</script>
+  <title>Random Quote Generator</title>
+</head>
+<body>
+  <section>
+    <header>
+      <h1>Random Quote Generator</h1>
+    </header>
+    <div class="container">
+      <blockquote id="quote"></blockquote>
+      <div id="author"></div>
+    </div>
+    <a class="twitter-share-button" id="tweetBtn" data-size=large target="_blank">
+  Tweet</a>
+    <button id="refreshBtn" onclick=location=URL>Refresh</button>
+  </section>
+  <footer>
+    <div id="myName">made by Jacob</div>
+    <div class="icons">
+      <a href="https://www.instagram.com/billblack67/" id="instagram"><i class="fab fa-instagram fa-2x"></i></a>
+      <a href="https://github.com/jacobc1204" id="github"><i class="fab fa-github fa-2x"></i></a>
+      <a href="https://www.linkedin.com/in/jacobc1204/" id="linkedin"><i class="fab fa-linkedin fa-2x"></i></a>
+    </div>
+  </footer>  
+</body>
+<style>
+  body {
+  font-family: Quicksand;
+  color: black;
+  margin-top: 5%;
+  margin-right: 5%;
+  margin-left: 5%;
+  background: linear-gradient(to bottom right, purple, pink);
+  background-size: contain;
+  background-attachment: absolute;
+}
+
+section {
+  color: rgba(0, 0, 0, 0.8);
+  background: linear-gradient(to bottom right, orange, blue);
+  display: grid;
+  grid-template-rows: 100px 1fr 100px;
+}
+
+h1 {
+  padding-left: 20px;
+}
+
+.container {
+  width: 70%;
+  justify-self: center;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 10px;
+  color: white;
+  display: grid;
+  grid-gap: 10px;
+  align-items: center;
+  justify-items: center;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+#quote {
+  font-size: 20px;
+  grid-column: 1 / -1;
+}
+
+#author {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.twitter-share-button {
+  align-self: start;
+  justify-self: center;
+}
+
+#refreshBtn {
+  padding: 10px;
+  justify-self: start;
+  align-self: center;
+  width: 100px;
+  background: linear-gradient(to bottom right, orange, red);
+  border: none;
+}
+
+footer {
+  bottom: 0;
+  height: 100px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, auto);
+  grid-template-rows: repeat(2, 1fr);
+}
+
+#myName {
+  grid-column: 1 / -1;
+  justify-self: center;
+  align-self: center;
+}
+
+a {
+  color: black;
+}
+
+.icons {
+  grid-column: 1 / -1;
+  justify-self: center;
+  align-self: center;
+}
+</style>
+<script>
+  function parseQuote(response) {
+  var Quote = response.quoteText;
+  var Author = response.quoteAuthor;
+  $("#quote").text(Quote);
+  $("#author").text(Author);
+  $('#tweetBtn').attr("href", 'https://twitter.com/intent/tweet/?text=' + Quote + ' - ' + Author);
+};
+var tag = document.createElement("script");
+tag.src="https://api.forismatic.com/api/1.0/?method=getQuote&format=jsonp&lang=en&jsonp=parseQuote";
+$('#quote').html(tag);
+
+function tweet() {
+  $('#tweetBtn').attr("href", 'https://twitter.com/intent/tweet/?text=Hello');
+}
+</script>
+</html>
